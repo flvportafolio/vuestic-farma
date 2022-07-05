@@ -1,22 +1,24 @@
+import { MainState } from "../types/MainStore.interface";
+
 export default {
-  canListarProveedores(state: any) {
-    const item = state.permisos.find((el: any) => el.modulo === state.slugModulos.proveedores) ?? false;
+  canListarProveedores(state: MainState) {
+    const item = state.permisos.find((el) => el.modulo === state.slugModulos.proveedores) ?? false;
     return (item.listar === 1);
   },
-  canCrearProveedores(state: any) {
-    const item = state.permisos.find((el: any) => el.modulo === state.slugModulos.proveedores) ?? false;
+  canCrearProveedores(state: MainState) {
+    const item = state.permisos.find((el) => el.modulo === state.slugModulos.proveedores) ?? false;
     return (item.crear === 1);
   },
-  canEditarProveedores(state: any) {
-    const item = state.permisos.find((el: any) => el.modulo === state.slugModulos.proveedores) ?? false;
+  canEditarProveedores(state: MainState) {
+    const item = state.permisos.find((el) => el.modulo === state.slugModulos.proveedores) ?? false;
     return (item.editar === 1);
   },
-  canEliminarProveedores(state: any) {
-    const item = state.permisos.find((el: any) => el.modulo === state.slugModulos.proveedores) ?? false;
+  canEliminarProveedores(state: MainState) {
+    const item = state.permisos.find((el) => el.modulo === state.slugModulos.proveedores) ?? false;
     return (item.eliminar === 1);
   },
-  canImprimirProveedores(state: any) {
-    const item = state.permisos.find((el: any) => el.modulo === state.slugModulos.proveedores) ?? false;
+  canImprimirProveedores(state: MainState) {
+    const item = state.permisos.find((el) => el.modulo === state.slugModulos.proveedores) ?? false;
     return (item.imprimir === 1);
   },
 };

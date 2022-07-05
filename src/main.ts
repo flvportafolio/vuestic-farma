@@ -2,8 +2,6 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import { createVuestic } from 'vuestic-ui';
 import 'vuestic-ui/dist/vuestic-ui.css';
-/* import 'bootstrap/dist/css/bootstrap.css'; */
-import 'bootstrap';
 import Multiselect from 'vue-multiselect';
 import 'vue-multiselect/dist/vue-multiselect.css';
 import DatePicker from 'vue-datepicker-next';
