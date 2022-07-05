@@ -1,3 +1,4 @@
+import { nextTick } from 'vue';
 import { createWebHistory, createRouter, RouteRecordRaw  } from 'vue-router';
 import { useMainStore } from '../stores/index';
 import Error403 from '@/views/pages/Error403.vue';
@@ -73,6 +74,13 @@ router.beforeEach((to, from, next) => {
     next();
   }
 });
+
+router.afterEach((to) => {
+  nextTick(() => {
+    document.title = to.meta.title as string || 'Farmacia Fabio';
+  });
+});
+
 
 
 export default router;

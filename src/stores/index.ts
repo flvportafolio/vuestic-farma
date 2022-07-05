@@ -3,6 +3,11 @@ import { StatusCodes } from '../utils/statusCodes';
 import axios from '../axiosConfig';
 import gettersUsuarios from './permisos/usuarios';
 import gettersProductos from './permisos/productos';
+import gettersProveedores from './permisos/proveedores';
+import gettersPedidos from './permisos/pedidos';
+import gettersReportes from './permisos/reportes';
+import gettersInventario from './permisos/inventario';
+
 
 interface User {
   nombre_usuario: string;
@@ -35,6 +40,10 @@ export const useMainStore = defineStore('main', {
     }, */
     ...gettersUsuarios,
     ...gettersProductos,
+    ...gettersProveedores,
+    ...gettersPedidos,
+    ...gettersReportes,
+    ...gettersInventario,
   },
   actions: {
     setUserData(data: User) {

@@ -1,11 +1,25 @@
-<script setup lang="ts">
-import { useSlots } from 'vue';
+<script lang="ts">
+import { defineComponent, useSlots } from 'vue';
 
-defineProps<{ isFocused: boolean }>()
-const slots = useSlots();
-const hasSlot = (name: string) => {
-  return !!slots[name];
-}
+export default defineComponent({
+  props: {
+    isFocused: {
+      type: Boolean,
+      required: true,
+    }
+  },
+  setup() {
+    const slots = useSlots();
+
+    function  hasSlot(name: string) {
+      return !!slots[name];
+    }
+
+    return {
+      hasSlot
+    };
+  }
+});
 </script>
 
 <template>
