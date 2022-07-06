@@ -1,6 +1,5 @@
 <script>
 import { getProducts, deleteProduct, getProductsPdf } from "@/services/productApi";
-import { useMainStore } from '@/stores/index';
 import showNotify, { TypeNotification } from '@/utils/notifications';
 import { StatusCodes } from '@/utils/statusCodes';
 import { openPdfNewTab } from '@/utils/pdf';
@@ -12,7 +11,6 @@ export default {
     ModalClasificacion,
   },
   created() {
-    useMainStore().setNavigationTitle('Lista de Productos');
     this.getProductosApi();
   },
   data() {
@@ -217,143 +215,150 @@ export default {
 };
 </script>
 <template>
-  <va-card>
-    <div class="row">
-      <div class="row flex md9">
-        <div class="flex md2" style="text-align: center">
-          <va-button
-            color="info"
-            class="mr-2"
-            @click="goToCreateRoute"
-          >
-            Nuevo
-          </va-button>
-        </div>
-        <div class="flex md6">
-          <va-button-group color="secondary" outline class="mr-2">
-            <va-button
-              @click="modalClasificacion = !modalClasificacion"
-            >
-              Clasificación
-            </va-button>
-            <va-button> Presentacion </va-button>
-            <va-button> Lote </va-button>
-          </va-button-group>
-        </div>
-        <div class="flex md1 pl-0">
-          <img
-            @click="generarPDF"
-            title="lista de productos"
-            height="36"
-            src="@/assets/pdf_icon.svg"
-            :style="isLoadingPDF? 'cursor:wait':'cursor:pointer'"
-          >
-        </div>
+  <div>
+    <div class="row mb-3">
+      <div class="flex md12 pt-0">
+        <h4 class="display-5">Lista de Productos</h4>
       </div>
     </div>
-    <va-divider class="mt-0"></va-divider>
-    <div class="row mb-3">
-      <div class="flex md3 ml-3">
-        <va-input
-          v-model="search"
-          @keyup="searchFromInput"
-          label="Buscar"
-          placeholder="Escriba un nombre"
+    <va-card>
+      <div class="row">
+        <div class="row flex md9">
+          <div class="flex md2" style="text-align: center">
+            <va-button
+              color="info"
+              class="mr-2"
+              @click="goToCreateRoute"
+            >
+              Nuevo
+            </va-button>
+          </div>
+          <div class="flex md6">
+            <va-button-group color="secondary" outline class="mr-2">
+              <va-button
+                @click="modalClasificacion = !modalClasificacion"
+              >
+                Clasificación
+              </va-button>
+              <va-button> Presentacion </va-button>
+              <va-button> Lote </va-button>
+            </va-button-group>
+          </div>
+          <div class="flex md1 pl-0">
+            <img
+              @click="generarPDF"
+              title="lista de productos"
+              height="36"
+              src="@/assets/pdf_icon.svg"
+              :style="isLoadingPDF? 'cursor:wait':'cursor:pointer'"
+            >
+          </div>
+        </div>
+      </div>
+      <va-divider class="mt-0"></va-divider>
+      <div class="row mb-3">
+        <div class="flex md3 ml-3">
+          <va-input
+            v-model="search"
+            @keyup="searchFromInput"
+            label="Buscar"
+            placeholder="Escriba un nombre"
+          >
+            <template #prependInner>
+              <va-icon
+                name="search"
+              />
+            </template>
+          </va-input>
+        </div>
+        <div class="flex md6 text-center pt-1">
+          <va-radio
+            v-for="(option, index) in optionsRadio"
+            :key="index"
+            v-model="selectedRadio"
+            :option="option.value"
+            :label="option.text"
+            name="radio-options"
+          />
+        </div>
+      </div>
+      <div class="row mx-0 table-responsive">
+        <va-data-table
+          no-data-html="No hay datos"
+          striped
+          :items="items"
+          :columns="fields"
+          :loading="isLoadingTable"
         >
-          <template #prependInner>
+          <template #cell(editar)="{ rowData }">
+            <router-link
+              v-if="filterState"
+              :to="{ name: 'producto-edit', params: { id: encodeBase64(rowData.id) } }"
+            >
+              <va-icon name="edit" color="secondary"/>
+            </router-link>
+          </template>
+          <template #cell(eliminar)="{ rowData }">
             <va-icon
-              name="search"
+              v-if="filterState"
+              @click="openModalEliminar(rowData.id)"
+              name="delete_outline"
+              color="danger"
+              style="cursor:pointer"
             />
           </template>
-        </va-input>
+          <template #cell(foto)="{ rowData }">    
+            <img
+              v-if="rowData.foto !== null"
+              :src="rowData.foto"
+              :alt="rowData.foto"
+              width="48"
+            >          
+          </template>
+          <template #cell(es_controlado)="{ rowData }">
+            {{rowData.es_estupefaciente || rowData.es_psicotropico? 'Si': 'No'}}
+          </template>
+        </va-data-table>
       </div>
-      <div class="flex md6 text-center pt-1">
-        <va-radio
-          v-for="(option, index) in optionsRadio"
-          :key="index"
-          v-model="selectedRadio"
-          :option="option.value"
-          :label="option.text"
-          name="radio-options"
-        />
-      </div>
-    </div>
-    <div class="row mx-0 table-responsive">
-      <va-data-table
-        no-data-html="No hay datos"
-        striped
-        :items="items"
-        :columns="fields"
-        :loading="isLoadingTable"
-      >
-        <template #cell(editar)="{ rowData }">
-          <router-link
-            v-if="filterState"
-            :to="{ name: 'producto-edit', params: { id: encodeBase64(rowData.id) } }"
-          >
-            <va-icon name="edit" color="secondary"/>
-          </router-link>
-        </template>
-        <template #cell(eliminar)="{ rowData }">
-          <va-icon
-            v-if="filterState"
-            @click="openModalEliminar(rowData.id)"
-            name="delete_outline"
-            color="danger"
-            style="cursor:pointer"
+      <div class="row mt-3">
+        <div class="flex offset--md8 md4">
+          <va-pagination
+            v-model="currentPage"
+            :pages="getPagesPagination"
+            :visible-pages="3"
+            direction-links
           />
-        </template>
-        <template #cell(foto)="{ rowData }">    
-          <img
-            v-if="rowData.foto !== null"
-            :src="rowData.foto"
-            :alt="rowData.foto"
-            width="48"
-          >          
-        </template>
-        <template #cell(es_controlado)="{ rowData }">
-          {{rowData.es_estupefaciente || rowData.es_psicotropico? 'Si': 'No'}}
-        </template>
-      </va-data-table>
-    </div>
-    <div class="row mt-3">
-      <div class="flex offset--md8 md4">
-        <va-pagination
-          v-model="currentPage"
-          :pages="getPagesPagination"
-          :visible-pages="3"
-          direction-links
-        />
+        </div>
       </div>
-    </div>
-    <va-modal
-      v-model="modalEliminar"
-      size="small"
-      title="Eliminar Registro"
+      <va-modal
+        v-model="modalEliminar"
+        size="small"
+        title="Eliminar Registro"
 
-      hide-default-actions
-      cancel-text="Cancelar"
-      ok-text="Eliminar"
-    >
-      <p class="my-2">
-        ¿Desea eliminar el registro con Id: <b>{{selectedId}}</b> ?
-      </p>
-      <template #footer>
-        <va-button
-          class="mr-2"
-          @click="modalEliminar = false"
-          color="secondary"
-        >
-          Cancelar
-        </va-button>
-        <va-button
-          @click="deleteItem"
-          color="danger"
-        >
-          Eliminar
-        </va-button>
-      </template>
-    </va-modal>
-    <ModalClasificacion v-model="modalClasificacion" @onUpdate="getProductosApi"/>
-  </va-card>
+        hide-default-actions
+        cancel-text="Cancelar"
+        ok-text="Eliminar"
+      >
+        <p class="my-2">
+          ¿Desea eliminar el registro con Id: <b>{{selectedId}}</b> ?
+        </p>
+        <template #footer>
+          <va-button
+            class="mr-2"
+            @click="modalEliminar = false"
+            color="secondary"
+          >
+            Cancelar
+          </va-button>
+          <va-button
+            @click="deleteItem"
+            color="danger"
+          >
+            Eliminar
+          </va-button>
+        </template>
+      </va-modal>
+      <ModalClasificacion v-model="modalClasificacion" @onUpdate="getProductosApi"/>
+    </va-card>
+  </div>
 </template>
