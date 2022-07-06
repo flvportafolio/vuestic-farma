@@ -30,56 +30,58 @@ const getUserName = computed(() => {
         <va-button-dropdown
           color="white" :label="getUserName" flat
         >
-          <va-sidebar-item :to="{ name: 'profile' }" active>
-            <va-sidebar-item-content class="py-2">
-              <va-sidebar-item-title>
-                Mi perfil
-              </va-sidebar-item-title>
-            </va-sidebar-item-content>
-          </va-sidebar-item>
-          <va-sidebar-item>
-            <va-sidebar-item-content class="py-2">
-              <va-sidebar-item-title>
-                Módulos
-              </va-sidebar-item-title>
-            </va-sidebar-item-content>
-          </va-sidebar-item>
-          <va-sidebar-item>
-            <va-sidebar-item-content class="py-2">
-              <va-sidebar-item-title>
-                Empresas
-              </va-sidebar-item-title>
-            </va-sidebar-item-content>
-          </va-sidebar-item>
-          <va-sidebar-item>
-            <va-sidebar-item-content class="py-2">
-              <va-sidebar-item-title>
-                 Formas de Pago
-              </va-sidebar-item-title>
-            </va-sidebar-item-content>
-          </va-sidebar-item>
-          <va-sidebar-item>
-            <va-sidebar-item-content class="py-2">
-              <va-sidebar-item-title>
-                Países
-              </va-sidebar-item-title>
-            </va-sidebar-item-content>
-          </va-sidebar-item>
-          <va-divider />
-          <va-sidebar-item>
-            <va-sidebar-item-content class="py-2 cursor-pointer">
-              <va-sidebar-item-title @click="logout">
-                Cerrar sesión
-              </va-sidebar-item-title>
-            </va-sidebar-item-content>
-          </va-sidebar-item>
+          <va-sidebar>
+            <va-sidebar-item :to="{ name: 'profile' }" active>
+              <va-sidebar-item-content class="py-2">
+                <va-sidebar-item-title>
+                  Mi perfil
+                </va-sidebar-item-title>
+              </va-sidebar-item-content>
+            </va-sidebar-item>
+            <va-sidebar-item hover-color="danger">
+              <va-sidebar-item-content class="py-2">
+                <va-sidebar-item-title>
+                  Módulos
+                </va-sidebar-item-title>
+              </va-sidebar-item-content>
+            </va-sidebar-item>
+            <va-sidebar-item hover-color="danger">
+              <va-sidebar-item-content class="py-2">
+                <va-sidebar-item-title>
+                  Empresas
+                </va-sidebar-item-title>
+              </va-sidebar-item-content>
+            </va-sidebar-item>
+            <va-sidebar-item hover-color="danger">
+              <va-sidebar-item-content class="py-2">
+                <va-sidebar-item-title>
+                  Formas de Pago
+                </va-sidebar-item-title>
+              </va-sidebar-item-content>
+            </va-sidebar-item>
+            <va-sidebar-item hover-color="danger">
+              <va-sidebar-item-content class="py-2">
+                <va-sidebar-item-title>
+                  Países
+                </va-sidebar-item-title>
+              </va-sidebar-item-content>
+            </va-sidebar-item>
+            <va-divider />
+            <va-sidebar-item>
+              <va-sidebar-item-content class="py-2 cursor-pointer">
+                <va-sidebar-item-title @click="logout">
+                  Cerrar sesión
+                </va-sidebar-item-title>
+              </va-sidebar-item-content>
+            </va-sidebar-item>
+          </va-sidebar>
         </va-button-dropdown>
       </va-navbar-item>
     </template>
   </va-navbar>
 </template>
 
-<style>
+<style scoped>
 .cursor-pointer {
   cursor:pointer;
 }
