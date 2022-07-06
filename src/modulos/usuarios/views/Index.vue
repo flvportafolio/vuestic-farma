@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue';
-import { useMainStore } from '@/stores/index';
 import { getUsers, deleteUser, getUsersPdf } from "@/services/userApi";
 import { useRouter, useRoute } from 'vue-router';
 import showNotify, { TypeNotification } from '@/utils/notifications';
 import { StatusCodes } from '@/utils/statusCodes';
 import { openPdfNewTab } from '@/utils/pdf';
 
-const store = useMainStore();
 const router = useRouter();
 const route = useRoute();
 
@@ -124,138 +122,142 @@ function searchFromInput() {
   searchTimeOut.value = setTimeout(getUsuariosApi, 500);
 }
 
-onMounted(()=> {
-  store.setNavigationTitle('Lista de usuarios');
-});
 getUsuariosApi();
 </script>
 
 <template>
-  <va-card>
-    <div class="row">
-      <div class="row flex md9 pb-0">
-        <div class="flex md2" style="text-align: center">
-          <va-button
-            color="info"
-            class="mr-2"
-            @click="goToCreateRoute"
-          >Nuevo</va-button>
-        </div>
-        <div class="flex md5">
-          <va-button-group color="secondary" outline class="mr-2">
-            <va-button>Cargos</va-button>
-            <va-button>Roles</va-button>
-            <va-button>Permisos</va-button>
-          </va-button-group>
-        </div>
-        <div class="flex md1 pl-0">
-          <img
-            @click="generarPDF"
-            title="lista de usuarios"
-            height="36"
-            src="@/assets/pdf_icon.svg"
-            :style="isLoadingPDF? 'cursor:wait':'cursor:pointer'"
-          >
-        </div>
-      </div>
-      <div class="flex md2 offset--md1 pt-3">
-        <va-switch
-          v-model="filterState"
-          @update:modelValue="getUsuariosApi"
-          :label="filterState? 'Activos' : 'Inactivos'"
-          size="small"
-        />
+  <div>
+    <div class="row mb-3">
+      <div class="flex md12 pt-0">
+        <h4 class="display-5">Lista de usuarios</h4>
       </div>
     </div>
-    <va-divider class="mt-0"></va-divider>
-    <div class="row mb-3">
-      <div class="flex md3 ml-3">
-        <va-input
-          v-model="search"
-          @keyup="searchFromInput"
-          label="Buscar"
-          placeholder="Escriba un nombre"
+    <va-card>
+      <div class="row">
+        <div class="row flex md9 pb-0">
+          <div class="flex md2" style="text-align: center">
+            <va-button
+              color="info"
+              class="mr-2"
+              @click="goToCreateRoute"
+            >Nuevo</va-button>
+          </div>
+          <div class="flex md5">
+            <va-button-group color="secondary" outline class="mr-2">
+              <va-button>Cargos</va-button>
+              <va-button>Roles</va-button>
+              <va-button>Permisos</va-button>
+            </va-button-group>
+          </div>
+          <div class="flex md1 pl-0">
+            <img
+              @click="generarPDF"
+              title="lista de usuarios"
+              height="36"
+              src="@/assets/pdf_icon.svg"
+              :style="isLoadingPDF? 'cursor:wait':'cursor:pointer'"
+            >
+          </div>
+        </div>
+        <div class="flex md2 offset--md1 pt-3">
+          <va-switch
+            v-model="filterState"
+            @update:modelValue="getUsuariosApi"
+            :label="filterState? 'Activos' : 'Inactivos'"
+            size="small"
+          />
+        </div>
+      </div>
+      <va-divider class="mt-0"></va-divider>
+      <div class="row mb-3">
+        <div class="flex md3 ml-3">
+          <va-input
+            v-model="search"
+            @keyup="searchFromInput"
+            label="Buscar"
+            placeholder="Escriba un nombre"
+          >
+            <template #prependInner>
+              <va-icon
+                name="search"
+              />
+            </template>
+          </va-input>
+        </div>
+      </div>
+      <div class="row mx-0">
+        <va-data-table
+          no-data-html="No hay datos"
+          striped
+          :items="items"
+          :columns="fields"
+          :loading="isLoadingTable"
         >
-          <template #prependInner>
+          <template #cell(telefono)="{ rowData }">
+            <a
+              :href="walink+rowData.prefijo_llamada+rowData.telefono"
+              target="_blank"
+            >{{rowData.telefono}}</a>
+          </template>
+          <template #cell(editar)="{ rowData }">
+            <router-link
+              v-if="filterState"
+              :to="{ name: 'usuario-edit', params: { id: encodeBase64(rowData.usuario_id) } }"
+            >
+              <va-icon name="edit" color="secondary"/>
+            </router-link>
+          </template>
+          <template #cell(eliminar)="{ rowData }">
             <va-icon
-              name="search"
+              v-if="filterState"
+              @click="openModalEliminar(rowData.usuario_id)"
+              name="delete_outline"
+              color="danger"
+              style="cursor:pointer"
             />
           </template>
-        </va-input>
+        </va-data-table>
       </div>
-    </div>
-    <div class="row mx-0">
-      <va-data-table
-        no-data-html="No hay datos"
-        striped
-        :items="items"
-        :columns="fields"
-        :loading="isLoadingTable"
-      >
-        <template #cell(telefono)="{ rowData }">
-          <a
-            :href="walink+rowData.prefijo_llamada+rowData.telefono"
-            target="_blank"
-          >{{rowData.telefono}}</a>
-        </template>
-        <template #cell(editar)="{ rowData }">
-          <router-link
-            v-if="filterState"
-            :to="{ name: 'usuario-edit', params: { id: encodeBase64(rowData.usuario_id) } }"
-          >
-            <va-icon name="edit" color="secondary"/>
-          </router-link>
-        </template>
-        <template #cell(eliminar)="{ rowData }">
-          <va-icon
-            v-if="filterState"
-            @click="openModalEliminar(rowData.usuario_id)"
-            name="delete_outline"
-            color="danger"
-            style="cursor:pointer"
+      <div class="row mt-3">
+        <div class="flex offset--md8 md4">
+          <va-pagination
+            @update:model-value="getUsuariosApi"
+            v-model="currentPage"
+            :visible-pages="3"
+            :total="totalRows"
+            :page-size="perPage"
+            boundary-numbers
           />
-        </template>
-      </va-data-table>
-    </div>
-    <div class="row mt-3">
-      <div class="flex offset--md8 md4">
-        <va-pagination
-          @update:model-value="getUsuariosApi"
-          v-model="currentPage"
-          :visible-pages="3"
-          :total="totalRows"
-          :page-size="perPage"
-          boundary-numbers
-        />
+        </div>
       </div>
-    </div>
-    <va-modal
-      v-model="modalEliminar"
-      size="small"
-      title="Eliminar Usuario"
+      <va-modal
+        v-model="modalEliminar"
+        size="small"
+        title="Eliminar Usuario"
 
-      hide-default-actions
-      cancel-text="Cancelar"
-      ok-text="Eliminar"
-    >
-      <p class="my-2">
-        ¿Desea eliminar el registro con Id: <b>{{selectedId}}</b> ?
-      </p>
-      <template #footer>
-        <va-button
-          class="mr-2"
-          @click="modalEliminar = false"
-          color="secondary"
-        >
-          Cancelar
-        </va-button>
-        <va-button
-          @click="deleteItem"
-          color="danger"
-        >
-          Eliminar
-        </va-button>
-      </template>
-    </va-modal>    
-  </va-card>
+        hide-default-actions
+        cancel-text="Cancelar"
+        ok-text="Eliminar"
+      >
+        <p class="my-2">
+          ¿Desea eliminar el registro con Id: <b>{{selectedId}}</b> ?
+        </p>
+        <template #footer>
+          <va-button
+            class="mr-2"
+            @click="modalEliminar = false"
+            color="secondary"
+          >
+            Cancelar
+          </va-button>
+          <va-button
+            @click="deleteItem"
+            color="danger"
+          >
+            Eliminar
+          </va-button>
+        </template>
+      </va-modal>    
+    </va-card>
+  </div>
 </template>

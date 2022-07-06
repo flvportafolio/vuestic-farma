@@ -1,7 +1,7 @@
 <template>  
   <div class="row pt-5">
     <div class="flex offset--md4 md4">
-      <img src="img/404-not-found.svg" class="w-100">
+      <img src="/img/404-not-found.svg" class="w-100">
     </div>
     <div class="flex md12 error-content mt-5">
       <h2 class="display-5">Página no encontrada</h2>
