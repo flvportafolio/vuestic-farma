@@ -1,7 +1,7 @@
 <template>
   <Navigation />
   <div style="display: flex;">
-    <div style="height: 100vh">
+    <div style="min-height: 100vh;">
       <va-sidebar
         textColor="dark"
         hoverable
