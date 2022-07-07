@@ -40,3 +40,20 @@ npm run build
 - vue3-notification
 - vue-currency-input
 - vue-datepicker-next
+
+## Capturas de Pantalla
+
+### Módulo de usuarios
+| Listado  | Crear / Modificar |
+| ------ | ------ |
+| ![userlist1](https://github.com/flvportafolio/vuestic-farma/blob/master/capturas/user_list1.webp) | ![usernew1](https://github.com/flvportafolio/vuestic-farma/blob/master/capturas/user_new1.webp) |
+| ![userlist2](https://github.com/flvportafolio/vuestic-farma/blob/master/capturas/user_list2.webp) | ![useredit1](https://github.com/flvportafolio/vuestic-farma/blob/master/capturas/user_edit1.webp) |
+
+### Módulo de productos
+| Listado  | Modificar |
+| ------ | ------ |
+| ![products_list1](https://github.com/flvportafolio/vuestic-farma/blob/master/capturas/products_list1.webp) | ![products_edit1](https://github.com/flvportafolio/vuestic-farma/blob/master/capturas/products_edit1.webp) |
+| ![products_list2](https://github.com/flvportafolio/vuestic-farma/blob/master/capturas/products_list2.webp) | |
+
+### Perfil de Usuario
+![profile_1](https://github.com/flvportafolio/vuestic-farma/blob/master/capturas/profile_1.webp)
