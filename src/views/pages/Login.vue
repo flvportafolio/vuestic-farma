@@ -67,7 +67,7 @@ async function login() {
       <div class="login-content">
         <form @submit.prevent="login">
           <img src="@/assets/avatar.svg" width="100" height="100">
-          <h3 class="title py-4">Login</h3>
+          <h3 class="display-3 py-4">Login</h3>
           <div class="input-div one" :class="correocustomClassEmail">
             <div class="i">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
@@ -104,7 +104,7 @@ async function login() {
           </div>
           <button type="submit" class="btn mt-5">
             <div class="row mx-0">
-              <div class="col-md-3 pr-0 text-right">
+              <div class="flex md3 pr-0 text-right">
                 <div
                   v-if="loading"
                   class="spinner-border text-primary"
@@ -113,7 +113,7 @@ async function login() {
                 >
                 </div>
               </div>
-              <div class="col-md-9 text-left">
+              <div class="flex md9 text-left">
                 Iniciar sesión
               </div>
             </div>

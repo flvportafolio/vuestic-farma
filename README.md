@@ -1,6 +1,6 @@
 # vuestic-farma
 
-La aplicación Frontend hace uso de Vue3 + TypeScript.
+La aplicación frontend hace uso de Vue3 + TypeScript. No se incorporan todos los modulos del proyecto original y lo que se pretende es hacer uso funcional de la libreria de componentes vuestic ui en remplazo de bootstrap 4
 
 ## Recommended IDE Setup
 
