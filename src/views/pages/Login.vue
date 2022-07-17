@@ -102,22 +102,12 @@ async function login() {
               >
             </div>
           </div>
-          <button type="submit" class="btn mt-5">
-            <div class="row mx-0">
-              <div class="flex md3 pr-0 text-right">
-                <div
-                  v-if="loading"
-                  class="spinner-border text-primary"
-                  style="width: 1.45rem; height: 1.45rem;"
-                  role="status"
-                >
-                </div>
-              </div>
-              <div class="flex md9 text-left">
-                Iniciar sesión
-              </div>
-            </div>
+          <button type="submit" class="btn mt-5">            
+            Iniciar sesión
           </button>
+          <div style="height: 8px;">
+            <va-progress-bar indeterminate v-if="loading"/>
+          </div>
         </form>
       </div>
     </div>
